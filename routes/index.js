@@ -1,14 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const characterController = require("../controllers/characterController");
 
-/* GET home page. */
-router.get("/", function (req, res, next) {
-  res.json("welcome");
-});
-
-router.get("/characters", (req, res) => {
-  res.json("hello");
-});
+router.get("/characters", characterController.characters);
+//router.post("/check", characterController.check); not needed
 
 router.post("/user", (req, res) => {
   res.json("hello");
