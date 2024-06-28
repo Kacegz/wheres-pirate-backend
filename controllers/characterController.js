@@ -7,7 +7,8 @@ exports.characters = asyncHandler(async (req, res) => {
   if (characters.length == 0) {
     return res.json({ errror: "No characters found" });
   }
-  return res.json(characters);
+  const names = characters.map((character) => character.name);
+  return res.json(names);
 });
 exports.check = [
   body("name").isLength({ min: 1 }).withMessage("Not a valid name"),
@@ -36,9 +37,24 @@ exports.check = [
         character.y + 10 >= req.body.y &&
         req.body.y >= character.y - 10
       ) {
-        return res.json({ found: true });
+        return res.json({ name: character.name, found: true });
       }
     }
     return res.json({ found: false });
   }),
 ];
+exports.checkWin = asyncHandler(async (req, res) => {
+  const characters = await Character.find({}).exec();
+  if (characters.length == 0) {
+    return res.json({ errror: "No characters found" });
+  }
+  const database = characters.map((character) => character.name);
+  const request = req.body.map((character) => character.name);
+  console.log(database);
+  console.log(request);
+  if (database.every((item) => request.includes(item))) {
+    return res.json(true);
+  } else {
+    return res.json(false);
+  }
+});
