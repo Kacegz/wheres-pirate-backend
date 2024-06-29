@@ -1,11 +1,11 @@
 const User = require("../models/User");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
-const { differenceInMilliseconds } = require("date-fns");
+const { differenceInMilliseconds, format } = require("date-fns");
 exports.setTimer = asyncHandler(async (req, res) => {
   req.session.userStart = new Date();
   console.log(req.session);
-  res.json(true);
+  return res.json(true);
 });
 exports.stopTimer = asyncHandler(async (req, res) => {
   req.session.userFinish = new Date();
@@ -18,18 +18,22 @@ exports.stopTimer = asyncHandler(async (req, res) => {
   });
 });
 exports.save = asyncHandler(async (req, res) => {
-  console.log(req.session);
-  console.log(req.body);
   const exists = await User.findOne({ nickname: req.body.nickname }).exec();
   if (!exists) {
     const newUser = new User({
       nickname: req.body.nickname,
-      startDate: req.session.userStart,
-      finishDate: req.session.userFinish,
+      time: differenceInMilliseconds(
+        req.session.userFinish,
+        req.session.userStart
+      ),
     });
     newUser.save();
     res.json(newUser);
   } else {
     res.json({ error: "user already exists" });
   }
+});
+exports.leaderboard = asyncHandler(async (req, res) => {
+  const top = await User.find({}).sort({ time: 1 }).limit(10).exec();
+  res.json(top);
 });

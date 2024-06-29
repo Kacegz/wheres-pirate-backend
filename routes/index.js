@@ -9,5 +9,6 @@ router.post("/checkWin", characterController.checkWin);
 router.get("/start", userController.setTimer);
 router.get("/stop", userController.stopTimer);
 router.post("/save", userController.save);
+router.get("/top", userController.leaderboard);
 
 module.exports = router;
