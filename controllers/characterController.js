@@ -50,8 +50,6 @@ exports.checkWin = asyncHandler(async (req, res) => {
   }
   const database = characters.map((character) => character.name);
   const request = req.body.map((character) => character.name);
-  console.log(database);
-  console.log(request);
   if (database.every((item) => request.includes(item))) {
     return res.json(true);
   } else {
