@@ -18,16 +18,16 @@ const indexRouter = require("./routes/index");
 const app = express();
 app.use(
   session({
-    secret: "secret-key",
+    secret: process.env.secret,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 60 * 60 * 1000,
+      maxAge: 30 * 60 * 1000, //30 minutes
     },
     store,
   })
 );
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: process.env.cors, credentials: true }));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
