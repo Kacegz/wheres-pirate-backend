@@ -32,10 +32,10 @@ exports.check = [
     const character = await Character.findOne({ name: req.body.name }).exec();
     if (character) {
       if (
-        character.x + 10 >= req.body.x &&
-        req.body.x >= character.x - 10 &&
-        character.y + 10 >= req.body.y &&
-        req.body.y >= character.y - 10
+        character.x + 12 >= req.body.x &&
+        req.body.x >= character.x - 12 &&
+        character.y + 12 >= req.body.y &&
+        req.body.y >= character.y - 12
       ) {
         return res.json({ name: character.name, found: true });
       }
@@ -44,15 +44,13 @@ exports.check = [
   }),
 ];
 exports.checkWin = asyncHandler(async (req, res) => {
-  const characters = await Character.find({}).exec();
-  if (characters.length == 0) {
-    return res.json({ errror: "No characters found" });
+  if (!req.body.length == 0) {
+    const characters = await Character.find({}).exec();
+    const database = characters.map((character) => character.name);
+    const request = req.body.map((character) => character.name);
+    if (database.every((item) => request.includes(item))) {
+      return res.json(true);
+    }
   }
-  const database = characters.map((character) => character.name);
-  const request = req.body.map((character) => character.name);
-  if (database.every((item) => request.includes(item))) {
-    return res.json(true);
-  } else {
-    return res.json(false);
-  }
+  return res.json(false);
 });
