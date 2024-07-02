@@ -4,15 +4,10 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const session = require("express-session");
-const mongoose = require("mongoose");
 require("dotenv").config();
+require("./mongoConfig");
 const store = new session.MemoryStore();
 
-const mongodb = process.env.db;
-main().catch((err) => console.log(err));
-async function main() {
-  await mongoose.connect(mongodb);
-}
 const indexRouter = require("./routes/index");
 
 const app = express();
