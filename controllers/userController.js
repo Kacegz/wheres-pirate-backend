@@ -21,7 +21,9 @@ exports.stopTimer = asyncHandler(async (req, res) => {
   });
 });
 exports.save = [
-  body("nickname", "Nickname must not be empty").isLength({ min: 1 }).escape(),
+  body("nickname", "Nickname must not be empty")
+    .isLength({ min: 1, max: 50 })
+    .escape(),
   asyncHandler(async (req, res) => {
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -39,7 +41,7 @@ exports.save = [
       newUser.save();
       res.json(newUser);
     } else {
-      res.json({ error: "user already exists" });
+      res.json({ error: "User already exists" });
     }
   }),
 ];
