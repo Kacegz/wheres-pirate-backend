@@ -1,6 +1,6 @@
 # Where's pirate backend
 ## Links:
-[Frontend repo]()
+- [Frontend repo](https://github.com/Kacegz/wheres-pirate)
 ## 🛠️ Built With
 - Node
 - Express
@@ -9,4 +9,4 @@
 ## Also used
 - Jest
 - Supertest
-- Datefns
+- Date-fns
