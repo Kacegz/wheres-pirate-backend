@@ -13,14 +13,14 @@ const app = express();
 app.use(
   session({
     secret: process.env.secret,
-    resave: true,
+    resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 30 * 60 * 1000, //30 minutes
+      secure: false,
     },
     store: MongoStore.create({
       mongoUrl: process.env.db,
-      ttl: 30 * 60,
+      ttl: 24 * 60 * 60,
     }),
   })
 );

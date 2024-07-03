@@ -18,6 +18,7 @@ exports.setTimer = asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, 
     if (!req.session.started) {
         req.session.started = true;
         req.session.userStart = new Date();
+        yield req.session.save();
         console.log(req.session);
         return res.json(true);
     }
@@ -26,6 +27,7 @@ exports.setTimer = asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, 
 exports.stopTimer = asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     req.session.userFinish = new Date();
     req.session.started = false;
+    yield req.session.save();
     console.log(req.session);
     return res.json({
         time: differenceInMilliseconds(req.session.userFinish, req.session.userStart),

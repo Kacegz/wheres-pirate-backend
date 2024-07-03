@@ -12,18 +12,20 @@ interface ISessionRequest extends Request {
   body: any;
 }
 
-exports.setTimer = asyncHandler(async (req: ISessionRequest, res: any) => {
+exports.setTimer = asyncHandler(async (req: any, res: any) => {
   if (!req.session.started) {
     req.session.started = true;
     req.session.userStart = new Date();
+    await req.session.save();
     console.log(req.session);
     return res.json(true);
   }
   return res.json(req.session.userStart);
 });
-exports.stopTimer = asyncHandler(async (req: ISessionRequest, res: any) => {
+exports.stopTimer = asyncHandler(async (req: any, res: any) => {
   req.session.userFinish = new Date();
   req.session.started = false;
+  await req.session.save();
   console.log(req.session);
   return res.json({
     time: differenceInMilliseconds(
@@ -36,7 +38,7 @@ exports.save = [
   body("nickname", "Nickname must not be empty")
     .isLength({ min: 1, max: 50 })
     .escape(),
-  asyncHandler(async (req: ISessionRequest, res: any) => {
+  asyncHandler(async (req: any, res: any) => {
     console.log(req.session);
     const result = validationResult(req);
     if (!result.isEmpty()) {
