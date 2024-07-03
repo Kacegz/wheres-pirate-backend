@@ -18,12 +18,12 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: true,
-      maxAge: 1000 * 60 * 60 * 48,
+      maxAge: 1000 * 60 * 30,
       sameSite: "none",
     },
     store: MongoStore.create({
       mongoUrl: process.env.db,
-      ttl: 24 * 60 * 60,
+      ttl: 30 * 60,
     }),
   })
 );
