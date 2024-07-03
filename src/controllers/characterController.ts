@@ -1,13 +1,22 @@
 const Character = require("../models/Character");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
-
-exports.characters = asyncHandler(async (req, res) => {
+interface ICoordinatesRequest {
+  body: {
+    x: number;
+    y: number;
+    name: string;
+  };
+}
+interface ICharactersRequest {
+  body: Array<string>;
+}
+exports.characters = asyncHandler(async (req: Request, res: any) => {
   const characters = await Character.find({}).exec();
   if (characters.length == 0) {
-    return res.json({ errror: "No characters found" });
+    return res.json({ error: "No characters found" });
   }
-  const names = characters.map((character) => character.name);
+  const names = characters.map((character: any) => character.name);
   return res.json(names);
 });
 exports.check = [
@@ -22,7 +31,7 @@ exports.check = [
     .withMessage("Not a number")
     .isLength({ min: 1 })
     .withMessage("Not a valid coordinate"),
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req: ICoordinatesRequest, res: any) => {
     const result = validationResult(req);
     if (!result.isEmpty()) {
       return res
@@ -43,12 +52,12 @@ exports.check = [
     return res.json({ found: false });
   }),
 ];
-exports.checkWin = asyncHandler(async (req, res) => {
-  if (!req.body.length == 0) {
+exports.checkWin = asyncHandler(async (req: any, res: any) => {
+  if (!(req.body.length == 0)) {
     const characters = await Character.find({}).exec();
-    const database = characters.map((character) => character.name);
-    const request = req.body.map((character) => character.name);
-    if (database.every((item) => request.includes(item))) {
+    const database = characters.map((character: any) => character.name);
+    const request = req.body.map((character: any) => character.name);
+    if (database.every((item: any) => request.includes(item))) {
       return res.json(true);
     }
   }

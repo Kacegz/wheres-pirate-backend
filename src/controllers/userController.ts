@@ -1,8 +1,18 @@
 const User = require("../models/User");
+const { Request, Response, NextFunction } = require("express");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const { differenceInMilliseconds } = require("date-fns");
-exports.setTimer = asyncHandler(async (req, res) => {
+interface ISessionRequest extends Request {
+  session: {
+    started?: boolean;
+    userStart?: Date;
+    userFinish?: Date;
+  };
+  body: any;
+}
+
+exports.setTimer = asyncHandler(async (req: ISessionRequest, res: any) => {
   if (!req.session.started) {
     req.session.started = true;
     req.session.userStart = new Date();
@@ -10,10 +20,10 @@ exports.setTimer = asyncHandler(async (req, res) => {
   }
   return res.json(req.session.userStart);
 });
-exports.stopTimer = asyncHandler(async (req, res) => {
+exports.stopTimer = asyncHandler(async (req: ISessionRequest, res: any) => {
   req.session.userFinish = new Date();
   req.session.started = false;
-  res.json({
+  return res.json({
     time: differenceInMilliseconds(
       req.session.userFinish,
       req.session.userStart
@@ -24,7 +34,7 @@ exports.save = [
   body("nickname", "Nickname must not be empty")
     .isLength({ min: 1, max: 50 })
     .escape(),
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req: ISessionRequest, res: any) => {
     const result = validationResult(req);
     if (!result.isEmpty()) {
       return res.json({ error: result.array()[0].msg });
@@ -39,13 +49,13 @@ exports.save = [
         ),
       });
       newUser.save();
-      res.json(newUser);
+      return res.json(newUser);
     } else {
-      res.json({ error: "User already exists" });
+      return res.json({ error: "User already exists" });
     }
   }),
 ];
-exports.leaderboard = asyncHandler(async (req, res) => {
+exports.leaderboard = asyncHandler(async (req: any, res: any) => {
   const top = await User.find({}).sort({ time: 1 }).limit(10).exec();
-  res.json(top);
+  return res.json(top);
 });
