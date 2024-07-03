@@ -23,7 +23,7 @@ app.use(session({
         ttl: 30 * 60,
     }),
 }));
-app.use(cors({ origin: process.env.cors, credentials: true }));
+app.use(cors({ credentials: true }));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
