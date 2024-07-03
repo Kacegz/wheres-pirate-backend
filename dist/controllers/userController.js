@@ -36,6 +36,7 @@ exports.save = [
         .isLength({ min: 1, max: 50 })
         .escape(),
     asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log(req.session);
         const result = validationResult(req);
         if (!result.isEmpty()) {
             return res.json({ error: result.array()[0].msg });

@@ -13,7 +13,7 @@ const app = express();
 app.use(
   session({
     secret: process.env.secret,
-    resave: false,
+    resave: true,
     saveUninitialized: false,
     cookie: {
       maxAge: 30 * 60 * 1000, //30 minutes
@@ -24,7 +24,7 @@ app.use(
     }),
   })
 );
-app.use(cors({ credentials: true }));
+app.use(cors({ origin: process.env.cors, credentials: true }));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
