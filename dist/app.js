@@ -11,6 +11,7 @@ require("./mongoConfig");
 const MongoStore = require("connect-mongo");
 const indexRouter = require("./routes/index");
 const app = express();
+app.set("trust proxy", 1);
 app.use(session({
     secret: process.env.secret,
     resave: false,
