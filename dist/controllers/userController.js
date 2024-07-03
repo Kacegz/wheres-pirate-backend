@@ -18,8 +18,6 @@ exports.setTimer = asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, 
     if (!req.session.started) {
         req.session.started = true;
         req.session.userStart = new Date();
-        yield req.session.save();
-        console.log(req.session);
         return res.json(true);
     }
     return res.json(req.session.userStart);
@@ -27,8 +25,6 @@ exports.setTimer = asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, 
 exports.stopTimer = asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     req.session.userFinish = new Date();
     req.session.started = false;
-    yield req.session.save();
-    console.log(req.session);
     return res.json({
         time: differenceInMilliseconds(req.session.userFinish, req.session.userStart),
     });
@@ -38,7 +34,6 @@ exports.save = [
         .isLength({ min: 1, max: 50 })
         .escape(),
     asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log(req.session);
         const result = validationResult(req);
         if (!result.isEmpty()) {
             return res.json({ error: result.array()[0].msg });
