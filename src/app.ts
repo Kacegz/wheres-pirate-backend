@@ -18,7 +18,10 @@ app.use(
     cookie: {
       maxAge: 30 * 60 * 1000, //30 minutes
     },
-    store: MongoStore.create({ mongoUrl: process.env.db }),
+    store: MongoStore.create({
+      mongoUrl: process.env.db,
+      ttl: 30 * 60,
+    }),
   })
 );
 app.use(cors({ origin: process.env.cors, credentials: true }));
