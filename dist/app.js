@@ -14,9 +14,8 @@ const app = express();
 app.use(session({
     secret: process.env.secret,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
-        secure: true,
         maxAge: 30 * 60 * 1000, //30 minutes
     },
     store: MongoStore.create({ mongoUrl: process.env.db }),

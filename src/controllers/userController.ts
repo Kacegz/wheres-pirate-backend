@@ -16,6 +16,7 @@ exports.setTimer = asyncHandler(async (req: ISessionRequest, res: any) => {
   if (!req.session.started) {
     req.session.started = true;
     req.session.userStart = new Date();
+    console.log(req.session);
     return res.json(true);
   }
   return res.json(req.session.userStart);
@@ -23,6 +24,7 @@ exports.setTimer = asyncHandler(async (req: ISessionRequest, res: any) => {
 exports.stopTimer = asyncHandler(async (req: ISessionRequest, res: any) => {
   req.session.userFinish = new Date();
   req.session.started = false;
+  console.log(req.session);
   return res.json({
     time: differenceInMilliseconds(
       req.session.userFinish,
