@@ -39,6 +39,9 @@ exports.save = [
     if (!result.isEmpty()) {
       return res.json({ error: result.array()[0].msg });
     }
+    if (req.session.userFinish === null || req.session.userStart === null) {
+      return res.json({ error: "Something went wrong" });
+    }
     const exists = await User.findOne({ nickname: req.body.nickname }).exec();
     if (!exists) {
       const newUser = new User({
